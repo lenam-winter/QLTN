@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin sinh viên</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card h2 {
+            color: #1a2a6c;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .info-item {
+            margin-bottom: 20px;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .sessions-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sessions-card h2 {
+            color: #1a2a6c;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .session-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .session-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .session-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #1a2a6c;
+        }
+
+        .session-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .session-details {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .session-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .start-exam-btn {
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .start-exam-btn:hover {
+            background: #2a3a7c;
+            transform: translateY(-2px);
+        }
+
+        .no-sessions {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .session-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: left;
+            }
+
+            .session-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-graduate"></i> Thông tin sinh viên</h1>
+            <a href="/students/login" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+            </a>
+        </div>
+
+        <div class="content">
+            <div class="info-card">
+                <h2>Thông tin cá nhân</h2>
+                <div class="info-item">
+                    <div class="info-label">Họ và tên</div>
+                    <div class="info-value"><i class="fas fa-user"></i> <%= student.name %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Mã số sinh viên</div>
+                    <div class="info-value"><i class="fas fa-id-card"></i> <%= student.studentId %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Ngày sinh</div>
+                    <div class="info-value"><i class="fas fa-calendar"></i> <%= student.dob.toLocaleDateString('vi-VN') %></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Lớp</div>
+                    <div class="info-value"><i class="fas fa-users"></i> <%= student.class ? student.class.className : 'Chưa phân lớp' %></div>
+                </div>
+            </div>
+
+            <div class="sessions-card">
+                <h2>Danh sách ca thi</h2>
+                <% if (sessions && sessions.length > 0) { %>
+                    <% sessions.forEach(session => { %>
+                        <div class="session-item">
+                            <div class="session-header">
+                                <div class="session-name"><i class="fas fa-file-alt"></i> <%= session.name %></div>
+                                <div class="session-date"><i class="fas fa-clock"></i> <%= session.date.toLocaleDateString('vi-VN') %></div>
+                            </div>
+                            <div class="session-details">
+                                <div class="session-detail">
+                                    <i class="fas fa-hourglass-half"></i>
+                                    Thời gian: <%= session.exam.duration %> phút
+                                </div>
+                                <div class="session-detail">
+                                    <i class="fas fa-tasks"></i>
+                                    Số câu hỏi: <%= session.exam.questions ? session.exam.questions.length : 'N/A' %>
+                                </div>
+                            </div>
+                            <form method="GET" action="/sessions/start-exam/<%= session._id %>">
+                                <button type="submit" class="start-exam-btn">
+                                    <i class="fas fa-play"></i>
+                                    Bắt đầu làm bài
+                                </button>
+                            </form>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <div class="no-sessions">
+                        <i class="fas fa-calendar-times"></i>
+                        <p>Hiện tại không có ca thi nào</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm & Danh sách sinh viên</title>
+  <style>
+    body {
+      background: #9fc1e2;
+      color: #2c3e50;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-bottom: 24px;
+      color: #2c3e50;
+      font-size: 1.8rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .form-container {
+      background: #f8f9fa;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+      border: 1px solid #e9ecef;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #495057;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      background: #ffffff;
+      color: #2c3e50;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4dabf7;
+      box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+    }
+    input::placeholder {
+      color: #adb5bd;
+    }
+    button {
+      padding: 12px 28px;
+      background: #4dabf7;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(77, 171, 247, 0.2);
+    }
+    button:hover {
+      background: #339af0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(77, 171, 247, 0.3);
+    }
+    table {
+      width: 100%;
+      margin-top: 16px;
+      background: #ffffff;
+      border-radius: 8px;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e9ecef;
+    }
+    th {
+      background: #f8f9fa;
+      color: #495057;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background: #f8f9fa;
+    }
+    .delete-btn {
+      background: #ff6b6b !important;
+      color: #ffffff !important;
+      padding: 6px 14px !important;
+      border-radius: 6px !important;
+      font-size: 0.9rem !important;
+      transition: all 0.3s ease !important;
+      border: none !important;
+      box-shadow: 0 2px 6px rgba(255, 107, 107, 0.2) !important;
+    }
+    .delete-btn:hover {
+      background: #fa5252 !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3) !important;
+    }
+    .back-link {
+      color: #4dabf7;
+      display: inline-block;
+      margin-top: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+    }
+    .back-link:hover {
+      background: #e9ecef;
+      transform: translateX(-5px);
+      color: #339af0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Thêm sinh viên</h2>
+      <form method="POST" action="/students/add">
+        <label for="name">Họ tên sinh viên:</label>
+        <input type="text" id="name" name="name" required placeholder="Nhập họ tên sinh viên..." />
+
+        <label for="dob">Ngày sinh:</label>
+        <input type="date" id="dob" name="dob" required />
+
+        <label for="studentId">Mã số sinh viên:</label>
+        <input type="text" id="studentId" name="studentId" required placeholder="Nhập mã số sinh viên..." />
+
+        <label for="classId">Chọn lớp:</label>
+        <select id="classId" name="classId" required>
+          <% classes.forEach(cls => { %>
+            <option value="<%= cls._id %>"><%= cls.className %></option>
+          <% }) %>
+        </select>
+
+        <button type="submit">Thêm sinh viên</button>
+      </form>
+    </div>
+    <h2>Danh sách sinh viên</h2>
+    <table>
+      <tr>
+        <th>Họ tên</th>
+        <th>Ngày sinh</th>
+        <th>Mã số SV</th>
+        <th>Lớp</th>
+        <th>CN</th>
+      </tr>
+      <% students.forEach(stu => { %>
+        <tr>
+          <td><%= stu.name %></td>
+          <td><%= stu.dob.toLocaleDateString('vi-VN') %></td>
+          <td><%= stu.studentId %></td>
+          <td><%= stu.class ? stu.class.className : '' %></td>
+          <td>
+            <form method="POST" action="/students/delete/<%= stu._id %>" onsubmit="return confirm('Bạn có chắc muốn xoá sinh viên này?');">
+              <button type="submit" class="delete-btn">
+                Xoá
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+    <a href="/admin/dashboard" class="back-link">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

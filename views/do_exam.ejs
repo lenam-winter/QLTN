@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Làm bài thi: <%= session.name %></title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .exam-header {
+            background: #1a2a6c;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exam-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .exam-info {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .timer {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            color: #1a2a6c;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .timer i {
+            color: #e74c3c;
+        }
+
+        .timer.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .timer.danger {
+            background: #f8d7da;
+            color: #721c24;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .question-container {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            color: #1a2a6c;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #1a2a6c;
+            background: #f8f9fa;
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #1a2a6c;
+        }
+
+        .option-label {
+            font-weight: 500;
+            color: #1a2a6c;
+            min-width: 30px;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .submit-btn {
+            background: #1a2a6c;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #2a3a7c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26, 42, 108, 0.2);
+        }
+
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .modal-message {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .confirm-btn {
+            background: #1a2a6c;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background: #2a3a7c;
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            background: #f8f9fa;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .exam-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .timer {
+                font-size: 1rem;
+            }
+
+            .question-container {
+                padding: 20px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="exam-header">
+            <div>
+                <div class="exam-title"><i class="fas fa-file-alt"></i> <%= session.name %></div>
+                <div class="exam-info">Đề: <%= session.exam.name %></div>
+            </div>
+            <div class="timer" id="timer" data-timeleft="<%= Number(timeLeft) %>">
+                <i class="fas fa-clock"></i>
+                <span>Đang tải...</span>
+            </div>
+        </div>
+
+        <form id="examForm" method="POST" action="/sessions/submit-exam/<%= session._id %>">
+            <% questions.forEach((q, idx) => { %>
+                <div class="question-container">
+                    <div class="question-number">
+                        <i class="fas fa-question-circle"></i>
+                        Câu <%= idx + 1 %>
+                    </div>
+                    <div class="question-content"><%= q.content %></div>
+                    <div class="options-container">
+                        <% q.options.forEach((opt, optIdx) => { %>
+                            <label class="option">
+                                <input type="radio" name="answers_<%= q._id %>" value="<%= optIdx %>" required />
+                                <span class="option-label"><%= String.fromCharCode(65 + optIdx) %></span>
+                                <span class="option-text"><%= opt %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                </div>
+            <% }) %>
+
+            <div class="submit-container">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Nộp bài thi
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="submitModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-paper-plane"></i>
+            </div>
+            <div class="modal-title">Xác nhận nộp bài</div>
+            <div class="modal-message">
+                Bạn có chắc chắn muốn nộp bài thi này?<br>
+                Sau khi nộp, bạn sẽ không thể thay đổi câu trả lời.
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" id="confirmSubmit">
+                    <i class="fas fa-check"></i> Xác nhận nộp bài
+                </button>
+                <button class="modal-btn cancel-btn" id="cancelSubmit">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startTimer() {
+            const timerEl = document.getElementById('timer');
+            const timerSpan = timerEl.querySelector('span');
+            const form = document.getElementById('examForm');
+            let timeLeft = parseInt(timerEl.dataset.timeleft);
+
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    timerEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> <span>Hết giờ!</span>';
+                    timerEl.classList.add('danger');
+                    form.submit();
+                } else {
+                    let hours = Math.floor(timeLeft / 3600);
+                    let minutes = Math.floor((timeLeft % 3600) / 60);
+                    let seconds = timeLeft % 60;
+                    
+                    let timeString = '';
+                    if (hours > 0) timeString += hours + ' giờ ';
+                    if (minutes > 0) timeString += minutes + ' phút ';
+                    timeString += seconds + ' giây';
+                    
+                    timerSpan.textContent = 'Thời gian còn lại: ' + timeString;
+                    
+                    // Thêm cảnh báo khi còn 5 phút
+                    if (timeLeft <= 300) {
+                        timerEl.classList.add('warning');
+                    }
+                    // Thêm cảnh báo khi còn 1 phút
+                    if (timeLeft <= 60) {
+                        timerEl.classList.add('danger');
+                    }
+                    
+                    timeLeft--;
+                }
+            }, 1000);
+        }
+
+        window.onload = startTimer;
+
+        // Submit confirmation
+        const form = document.getElementById('examForm');
+        const modal = document.getElementById('submitModal');
+        const confirmBtn = document.getElementById('confirmSubmit');
+        const cancelBtn = document.getElementById('cancelSubmit');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+
+        confirmBtn.addEventListener('click', function() {
+            form.submit();
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Prevent accidental form submission
+        // window.onbeforeunload = function() {
+        //     return "Bạn có chắc chắn muốn rời khỏi trang? Tất cả câu trả lời sẽ bị mất.";
+        // };
+    </script>
+</body>
+</html>

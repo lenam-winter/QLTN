@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả bài thi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        .result-header {
+            background: #1a2a6c;
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .result-header h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-summary {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1a2a6c;
+        }
+
+        .summary-value.correct {
+            color: #28a745;
+        }
+
+        .summary-value.score {
+            color: #1a2a6c;
+        }
+
+        .summary-value.time {
+            color: #6c757d;
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+        }
+
+        .detail-section h3 {
+            color: #1a2a6c;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-number {
+            color: #1a2a6c;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-label {
+            font-weight: 500;
+            color: #1a2a6c;
+            min-width: 30px;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .correct-answer {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .wrong-answer {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .answer-status {
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        .status-correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-wrong {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1a2a6c;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background: #2a3a7c;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .result-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .question-container {
+                padding: 20px;
+            }
+
+            .option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .answer-status {
+                margin-left: 0;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-header">
+            <h2>
+                <i class="fas fa-clipboard-check"></i>
+                Kết quả bài thi: <%= session.name %>
+            </h2>
+        </div>
+
+        <div class="result-summary">
+            <div class="summary-item">
+                <div class="summary-label">Số câu đúng</div>
+                <div class="summary-value correct">
+                    <%= correct %> / <%= total %>
+                </div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Điểm số</div>
+                <div class="summary-value score">
+                    <%= score %> / 10
+                </div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">Thời gian làm bài</div>
+                <div class="summary-value time">
+                    <%= durationMin %> phút <%= durationRemainSec %> giây
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-section">
+            <h3><i class="fas fa-list-check"></i> Đáp án chi tiết</h3>
+            <% questions.forEach((q, idx) => { %>
+                <div class="question-container">
+                    <div class="question-number">
+                        <i class="fas fa-question-circle"></i>
+                        Câu <%= idx + 1 %>
+                    </div>
+                    <div class="question-content"><%= q.content %></div>
+                    <div class="options-container">
+                        <% q.options.forEach((opt, optIdx) => { %>
+                            <div class="option">
+                                <span class="option-label"><%= String.fromCharCode(65 + optIdx) %></span>
+                                <span class="option-text <%= q.answer === optIdx ? 'correct-answer' : '' %> <%= String(answers[q._id.toString()]) === String(optIdx) ? (q.answer === optIdx ? 'correct-answer' : 'wrong-answer') : '' %>">
+                                    <%= opt %>
+                                </span>
+                                <% if (q.answer === optIdx) { %>
+                                    <span class="answer-status status-correct">Đáp án đúng</span>
+                                <% } %>
+                                <% if (String(answers[q._id.toString()]) === String(optIdx)) { %>
+                                    <span class="answer-status <%= q.answer === optIdx ? 'status-correct' : 'status-wrong' %>">
+                                        <%= q.answer === optIdx ? 'Bạn chọn - Đúng' : 'Bạn chọn - Sai' %>
+                                    </span>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <a href="/students/info" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại trang thông tin
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Danh sách câu hỏi</title>
+  <style>
+    body { background: #764ba2; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .container { max-width: 900px; margin: 40px auto; background: rgba(255,255,255,0.13); padding: 32px 24px; border-radius: 12px; }
+    h2 { margin-bottom: 18px; }
+    .question-block { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid #fff3; }
+    .question-block:last-child { border-bottom: none; }
+    .options { margin-left: 18px; }
+    .answer { color: #ffda77; font-weight: bold; }
+    a { color: #ffda77; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Danh sách câu hỏi</h2>
+    <% questions.forEach(q => { %>
+      <div class="question-block">
+        <strong>Câu hỏi:</strong> <%= q.content %><br>
+        <strong>Đáp án:</strong>
+        <ul class="options">
+          <% q.options.forEach((opt, idx) => { %>
+            <li<% if (idx === q.answer) { %> class="answer"<% } %>>
+              <%= String.fromCharCode(65 + idx) %>. <%= opt %>
+              <% if (idx === q.answer) { %> (Đúng) <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    <% }) %>
+    <a href="/questions/add">Thêm câu hỏi mới</a>
+    <br>
+    <a href="/admin/dashboard" style="display:inline-block; margin-top:16px;">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm & Danh sách câu hỏi</title>
+  <style>
+    body {
+      background: #a3bbd3;
+      color: #2c3e50;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-bottom: 24px;
+      color: #2c3e50;
+      font-size: 1.8rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .form-container {
+      background: #f8f9fa;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+      border: 1px solid #e9ecef;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #495057;
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      background: #ffffff;
+      color: #2c3e50;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #4dabf7;
+      box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+    }
+    input[type="text"]::placeholder, textarea::placeholder {
+      color: #adb5bd;
+    }
+    button {
+      padding: 12px 28px;
+      background: #4dabf7;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(77, 171, 247, 0.2);
+    }
+    button:hover {
+      background: #339af0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(77, 171, 247, 0.3);
+    }
+    .question-block {
+      background: #ffffff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    .question-block:hover {
+      transform: translateX(5px);
+      border-color: #4dabf7;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .question-block strong {
+      color: #4dabf7;
+      font-size: 1.1rem;
+    }
+    .options {
+      margin: 12px 0 0 24px;
+      padding: 0;
+      list-style-type: none;
+    }
+    .options li {
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+    .options li:hover {
+      background: #e9ecef;
+    }
+    .answer {
+      color: #40c057;
+      font-weight: 600;
+      background: #ebfbee !important;
+      border: 1px solid #40c057;
+    }
+    .back-link {
+      color: #4dabf7;
+      display: inline-block;
+      margin-top: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+    }
+    .back-link:hover {
+      background: #e9ecef;
+      transform: translateX(-5px);
+      color: #339af0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Thêm câu hỏi</h2>
+      <form method="POST" action="/questions/add">
+        <label for="content">Nội dung câu hỏi:</label>
+        <textarea id="content" name="content" required placeholder="Nhập nội dung câu hỏi..."></textarea>
+
+        <label>Option 1:</label>
+        <input type="text" name="option1" required placeholder="Nhập lựa chọn 1..." />
+
+        <label>Option 2:</label>
+        <input type="text" name="option2" required placeholder="Nhập lựa chọn 2..." />
+
+        <label>Option 3:</label>
+        <input type="text" name="option3" required placeholder="Nhập lựa chọn 3..." />
+
+        <label>Option 4:</label>
+        <input type="text" name="option4" required placeholder="Nhập lựa chọn 4..." />
+
+        <label for="answer">Đáp án đúng:</label>
+        <select id="answer" name="answer" required>
+          <option value="0">Option 1</option>
+          <option value="1">Option 2</option>
+          <option value="2">Option 3</option>
+          <option value="3">Option 4</option>
+        </select>
+
+        <button type="submit">Thêm câu hỏi</button>
+      </form>
+    </div>
+    <h2>Danh sách câu hỏi</h2>
+    <% questions.forEach(q => { %>
+      <div class="question-block">
+        <strong>Câu hỏi:</strong> <%= q.content %><br>
+        <strong>Đáp án:</strong>
+        <ul class="options">
+          <% q.options.forEach((opt, idx) => { %>
+            <li<% if (idx === q.answer) { %> class="answer"<% } %>>
+              <%= String.fromCharCode(65 + idx) %>. <%= opt %>
+              <% if (idx === q.answer) { %> (Đúng) <% } %>
+            </li>
+          <% }) %>
+        </ul>
+        <form action="/questions/delete/<%= q._id %>" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xoá câu hỏi này?')">Xoá</button>
+        </form>
+      </div>
+    <% }) %>
+    <a href="/admin/dashboard" class="back-link">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

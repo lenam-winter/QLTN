@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm câu hỏi</title>
+  <style>
+    body { background: #764ba2; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .form-container { background: rgba(255,255,255,0.13); padding: 32px 24px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); min-width: 320px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input[type="text"], textarea, select { width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 6px; border: none; font-size: 1rem; }
+    button { padding: 10px 24px; background: #ffda77; color: #333; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #ffd14d; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Thêm câu hỏi</h2>
+    <form method="POST" action="/questions/add">
+      <label for="content">Nội dung câu hỏi:</label>
+      <textarea id="content" name="content" required></textarea>
+
+      <label>Option 1:</label>
+      <input type="text" name="option1" required />
+
+      <label>Option 2:</label>
+      <input type="text" name="option2" required />
+
+      <label>Option 3:</label>
+      <input type="text" name="option3" required />
+
+      <label>Option 4:</label>
+      <input type="text" name="option4" required />
+
+      <label for="answer">Đáp án đúng:</label>
+      <select id="answer" name="answer" required>
+        <option value="0">Option 1</option>
+        <option value="1">Option 2</option>
+        <option value="2">Option 3</option>
+        <option value="3">Option 4</option>
+      </select>
+
+      <button type="submit">Thêm câu hỏi</button>
+    </form>
+    <a href="/admin/dashboard" style="color:#ffda77; display:inline-block; margin-top:16px;">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

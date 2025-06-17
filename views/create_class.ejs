@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tạo lớp</title>
+  <style>
+    body { background: #764ba2; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .form-container { background: rgba(255,255,255,0.13); padding: 32px 24px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); min-width: 320px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input[type="text"] { width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 6px; border: none; font-size: 1rem; }
+    button { padding: 10px 24px; background: #ffda77; color: #333; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #ffd14d; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Tạo lớp mới</h2>
+    <form method="POST" action="/classes/create">
+      <label for="className">Tên lớp:</label>
+      <input type="text" id="className" name="className" required />
+      <button type="submit">Tạo lớp</button>
+    </form>
+  </div>
+</body>
+</html>

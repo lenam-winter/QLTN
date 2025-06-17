@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm sinh viên</title>
+  <style>
+    body { background: #764ba2; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .form-container { background: rgba(255,255,255,0.13); padding: 32px 24px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); min-width: 320px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input, select { width: 100%; padding: 8px; margin-bottom: 16px; border-radius: 6px; border: none; font-size: 1rem; }
+    button { padding: 10px 24px; background: #ffda77; color: #333; border: none; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #ffd14d; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Thêm sinh viên</h2>
+    <form method="POST" action="/students/add">
+      <label for="name">Họ tên sinh viên:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="dob">Ngày sinh:</label>
+      <input type="date" id="dob" name="dob" required />
+
+      <label for="studentId">Mã số sinh viên:</label>
+      <input type="text" id="studentId" name="studentId" required />
+
+      <label for="classId">Chọn lớp:</label>
+      <select id="classId" name="classId" required>
+        <% classes.forEach(cls => { %>
+          <option value="<%= cls._id %>"><%= cls.className %></option>
+        <% }) %>
+      </select>
+
+      <button type="submit">Thêm sinh viên</button>
+    </form>
+    <a href="/admin/dashboard" style="color:#ffda77; display:inline-block; margin-top:16px;">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

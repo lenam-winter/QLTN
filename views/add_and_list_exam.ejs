@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thêm & Danh sách đề thi</title>
+  <style>
+    body {
+      background: #9abbdb;
+      color: #2c3e50;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-bottom: 24px;
+      color: #2c3e50;
+      font-size: 1.8rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .form-container {
+      background: #f8f9fa;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+      border: 1px solid #e9ecef;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #495057;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      background: #ffffff;
+      color: #2c3e50;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: #4dabf7;
+      box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+    }
+    input[type="text"]::placeholder, input[type="number"]::placeholder {
+      color: #adb5bd;
+    }
+    button {
+      padding: 12px 28px;
+      background: #4dabf7;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(77, 171, 247, 0.2);
+    }
+    button:hover {
+      background: #339af0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(77, 171, 247, 0.3);
+    }
+    .exam-block {
+      background: #ffffff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    .exam-block:hover {
+      transform: translateX(5px);
+      border-color: #4dabf7;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .exam-block strong {
+      color: #4dabf7;
+      font-size: 1.1rem;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    .exam-info {
+      margin: 8px 0;
+      color: #495057;
+    }
+    .note {
+      font-size: 0.95rem;
+      color: #4dabf7;
+      margin-bottom: 16px;
+      padding: 12px;
+      background: rgba(77, 171, 247, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(77, 171, 247, 0.2);
+    }
+    .back-link {
+      color: #4dabf7;
+      display: inline-block;
+      margin-top: 24px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 6px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+    }
+    .back-link:hover {
+      background: #e9ecef;
+      transform: translateX(-5px);
+      color: #339af0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2>Tạo đề thi mới</h2>
+      <form method="POST" action="/exams/add">
+        <label for="name">Tên đề thi:</label>
+        <input type="text" id="name" name="name" required placeholder="Nhập tên đề thi..." />
+
+        <label for="duration">Thời gian thi (phút):</label>
+        <input type="number" id="duration" name="duration" min="1" required placeholder="Nhập thời gian thi..." />
+
+        <label for="numQuestions">Số lượng câu hỏi (tối đa <%= questionCount %>):</label>
+        <input type="number" id="numQuestions" name="numQuestions" min="1" max="<%= questionCount %>" required placeholder="Nhập số lượng câu hỏi..." />
+
+        <div class="note">
+          Các câu hỏi sẽ được chọn ngẫu nhiên từ ngân hàng câu hỏi.
+        </div>
+        <button type="submit">Tạo đề thi</button>
+      </form>
+    </div>
+    <h2>Danh sách đề thi</h2>
+    <% exams.forEach(exam => { %>
+      <div class="exam-block">
+        <div class="exam-info">
+          <strong>Tên đề thi:</strong> <%= exam.name %>
+        </div>
+        <div class="exam-info">
+          <strong>Thời gian:</strong> <%= exam.duration %> phút
+        </div>
+        <div class="exam-info">
+          <strong>Số câu hỏi:</strong> <%= exam.questions.length %>
+        </div>
+      </div>
+    <% }) %>
+    <a href="/admin/dashboard" class="back-link">⬅ Quay lại trang quản trị</a>
+  </div>
+</body>
+</html>

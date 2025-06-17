@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trang quản trị Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffffff 0%, #ebedef 100%);
+      min-height: 100vh;
+      color: #1a237e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(30, 136, 229, 0.1) 0%, transparent 50%);
+      animation: rotate 30s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .dashboard-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 48px 36px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      min-width: 350px;
+      max-width: 800px;
+      width: 95%;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      margin-bottom: 32px;
+      font-size: 2.2rem;
+      letter-spacing: 0.5px;
+      color: #1a237e;
+      font-weight: 600;
+    }
+
+    .info {
+      margin-bottom: 32px;
+      font-size: 1.1rem;
+      color: #1a237e;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(30, 136, 229, 0.2);
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+    }
+
+    a.button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(30, 136, 229, 0.3);
+      background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    }
+
+    a.button:active {
+      transform: translateY(0);
+    }
+
+    .logout {
+      background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+      color: white;
+      margin-top: 24px;
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .logout:hover {
+      background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+      box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
+    }
+
+    .button-icon {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 32px 24px;
+        margin: 20px;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        margin-bottom: 24px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      a.button {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard-container {
+        padding: 24px 16px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .info {
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h2>Xin chào, <%= admin %>!</h2>
+    <div class="actions">
+      <a class="button" href="/exams">
+        <i class="fas fa-file-alt button-icon"></i>
+        Quản lý đề thi
+      </a>
+      <a class="button" href="/questions">
+        <i class="fas fa-question-circle button-icon"></i>
+        Quản lý câu hỏi
+      </a>
+      <a class="button" href="/classes/list">
+        <i class="fas fa-chalkboard-teacher button-icon"></i>
+        Tạo lớp
+      </a>
+      <a class="button" href="/sessions/add">
+        <i class="fas fa-clock button-icon"></i>
+        Tạo ca thi
+      </a>
+      <a class="button" href="/students/add">
+        <i class="fas fa-user-graduate button-icon"></i>
+        Thêm sinh viên
+      </a>
+    </div>
+    <a class="button logout" href="/admin/logout">
+      <i class="fas fa-sign-out-alt button-icon"></i>
+      Đăng xuất
+    </a>
+  </div>
+</body>
+</html>
